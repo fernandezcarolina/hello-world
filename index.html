@@ -3,30 +3,153 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Hello, world</title>
+    <title>Hello, Sam</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
     <style>
+      :root {
+        --night-top: #0f0a1f;
+        --night-bottom: #3a1631;
+        --rose: #ffc2cf;
+        --red: #ff4d6d;
+        --moon: #fff4e0;
+      }
       body {
         margin: 0;
         min-height: 100vh;
         display: grid;
         place-items: center;
+        overflow: hidden;
         font-family: "Instrument Serif", Georgia, serif;
-        background: #f7f5f2;
-        color: #c8102e;
+        background: radial-gradient(ellipse at 50% 120%, var(--night-bottom), var(--night-top) 70%);
+        color: var(--rose);
         text-align: center;
       }
-      h1 { font-size: clamp(3.5rem, 12vw, 8rem); font-weight: 400; line-height: 1; margin: 0; letter-spacing: -0.02em; }
-      h1 em { font-style: italic; }
-      p { font-size: clamp(1.25rem, 2.5vw, 1.625rem); font-style: italic; margin-top: 1rem; }
+
+      /* Moon */
+      .moon {
+        position: fixed;
+        top: 9vh;
+        right: 12vw;
+        width: clamp(60px, 9vw, 110px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--moon);
+        box-shadow: 0 0 40px 10px rgba(255, 244, 224, 0.35), 0 0 120px 40px rgba(255, 194, 207, 0.15);
+        opacity: 0;
+        animation: fade-in 3s ease 0.3s forwards, glow 6s ease-in-out 3s infinite;
+      }
+
+      /* Stars and hearts are added by the script below */
+      .star {
+        position: fixed;
+        width: 2px;
+        height: 2px;
+        border-radius: 50%;
+        background: #fff;
+        animation: twinkle 3s ease-in-out infinite;
+      }
+      .heart {
+        position: fixed;
+        bottom: -40px;
+        color: var(--red);
+        pointer-events: none;
+        animation: float-up linear forwards;
+      }
+
+      /* Words */
+      main { position: relative; z-index: 1; padding: 0 16px; }
+      h1 {
+        font-size: clamp(3.5rem, 12vw, 8rem);
+        font-weight: 400;
+        line-height: 1;
+        margin: 0;
+        letter-spacing: -0.02em;
+        text-shadow: 0 0 30px rgba(255, 77, 109, 0.35);
+      }
+      h1 em { font-style: italic; color: var(--red); }
+      p {
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+        font-style: italic;
+        margin: 1.25rem 0 0;
+      }
+      .time {
+        display: inline-block;
+        color: #fff;
+        animation: heartbeat 1.6s ease-in-out 5s infinite;
+      }
+      .reveal {
+        opacity: 0;
+        filter: blur(8px);
+        transform: translateY(12px);
+        animation: reveal 1.8s ease forwards;
+      }
+      .reveal-1 { animation-delay: 0.8s; }
+      .reveal-2 { animation-delay: 2.4s; }
+
+      @keyframes reveal { to { opacity: 1; filter: blur(0); transform: none; } }
+      @keyframes fade-in { to { opacity: 1; } }
+      @keyframes glow {
+        50% { box-shadow: 0 0 60px 18px rgba(255, 244, 224, 0.45), 0 0 160px 60px rgba(255, 194, 207, 0.2); }
+      }
+      @keyframes twinkle { 50% { opacity: 0.15; } }
+      @keyframes heartbeat {
+        0%, 40%, 100% { transform: scale(1); }
+        20% { transform: scale(1.12); }
+      }
+      @keyframes float-up {
+        0% { transform: translateY(0) translateX(0) rotate(0); opacity: 0; }
+        10% { opacity: 0.9; }
+        100% { transform: translateY(-115vh) translateX(var(--drift)) rotate(var(--spin)); opacity: 0; }
+      }
+
+      /* Calmer version for people who turn off motion on their device */
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { animation: none !important; }
+        .reveal, .moon { opacity: 1; filter: none; transform: none; }
+        .heart { display: none; }
+      }
     </style>
   </head>
   <body>
+    <div class="moon" aria-hidden="true"></div>
     <main>
-      <h1>Hello, <em>world!</em></h1>
-      <p>My first website.</p>
+      <h1 class="reveal reveal-1">Hello, <em>Sam.</em></h1>
+      <p class="reveal reveal-2">Come to bed at <span class="time">10 pm</span> ♡</p>
     </main>
+    <script>
+      // Scatter twinkling stars across the sky
+      for (let i = 0; i < 90; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + 'vw';
+        star.style.top = Math.random() * 100 + 'vh';
+        star.style.opacity = 0.3 + Math.random() * 0.7;
+        star.style.animationDelay = Math.random() * 3 + 's';
+        star.setAttribute('aria-hidden', 'true');
+        document.body.appendChild(star);
+      }
+
+      // Send up a gentle stream of hearts
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const addHeart = () => {
+          const heart = document.createElement('div');
+          heart.className = 'heart';
+          heart.textContent = '♥';
+          heart.setAttribute('aria-hidden', 'true');
+          const duration = 7 + Math.random() * 6;
+          heart.style.left = Math.random() * 100 + 'vw';
+          heart.style.fontSize = 12 + Math.random() * 22 + 'px';
+          heart.style.opacity = 0.9;
+          heart.style.animationDuration = duration + 's';
+          heart.style.setProperty('--drift', (Math.random() * 120 - 60) + 'px');
+          heart.style.setProperty('--spin', (Math.random() * 60 - 30) + 'deg');
+          document.body.appendChild(heart);
+          setTimeout(() => heart.remove(), duration * 1000);
+        };
+        setTimeout(() => setInterval(addHeart, 450), 3000);
+      }
+    </script>
   </body>
 </html>
