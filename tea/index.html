@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Green tea, please</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --paper: #f2ede3;
+        --paper-deep: #e6dfd0;
+        --ink: #2b2a26;
+        --ink-soft: #7a766c;
+        --matcha: #6b8f47;
+        --matcha-light: #a9c28a;
+        --seal: #b8392b;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        font-family: "Shippori Mincho", Georgia, serif;
+        color: var(--ink);
+        background:
+          radial-gradient(ellipse at 50% 40%, var(--paper) 40%, var(--paper-deep) 100%);
+        cursor: default;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      /* Faint paper grain */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.35;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.4 0 0 0 0 0.3 0 0 0 0.12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+
+      main {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        gap: clamp(20px, 5vw, 64px);
+        padding: 0 16px;
+      }
+      .message { text-align: center; }
+
+      /* Tea cup */
+      .cup { width: clamp(110px, 16vw, 160px); margin: 0 auto 1.5rem; display: block; overflow: visible; }
+      .cup .steam {
+        fill: none;
+        stroke: var(--ink-soft);
+        stroke-width: 2;
+        stroke-linecap: round;
+        opacity: 0;
+        animation: steam 6s ease-in-out infinite;
+      }
+      .cup .steam:nth-of-type(2) { animation-delay: 2s; }
+      .cup .steam:nth-of-type(3) { animation-delay: 4s; }
+
+      h1 {
+        font-size: clamp(2rem, 6vw, 4rem);
+        font-weight: 400;
+        line-height: 1.25;
+        margin: 0;
+        letter-spacing: 0.01em;
+      }
+      h1 .tea { color: var(--matcha); font-weight: 600; }
+
+      .line {
+        margin: 1.75rem auto 0;
+        width: 0;
+        height: 1px;
+        background: var(--matcha-light);
+        animation: draw 2.4s ease 3s forwards;
+      }
+
+      /* Vertical Japanese and seal */
+      .vertical {
+        writing-mode: vertical-rl;
+        font-size: clamp(1rem, 2.4vw, 1.5rem);
+        letter-spacing: 0.4em;
+        color: var(--ink-soft);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .seal {
+        writing-mode: horizontal-tb;
+        display: grid;
+        place-items: center;
+        width: 2.2em;
+        height: 2.2em;
+        border-radius: 6px;
+        background: var(--seal);
+        color: var(--paper);
+        font-size: 0.9em;
+        letter-spacing: 0;
+        opacity: 0;
+        transform: scale(1.6) rotate(-8deg);
+        animation: stamp 0.5s cubic-bezier(.3, 1.4, .5, 1) 4.2s forwards;
+      }
+
+      /* Ink soaking into paper */
+      .ink {
+        opacity: 0;
+        filter: blur(6px);
+        animation: ink 2.6s ease forwards;
+      }
+      .ink-1 { animation-delay: 0.3s; }
+      .ink-2 { animation-delay: 1.2s; }
+      .ink-3 { animation-delay: 2.4s; }
+
+      /* Water ripple on tap */
+      .ripple {
+        position: fixed;
+        width: 20px;
+        height: 20px;
+        margin: -10px 0 0 -10px;
+        border-radius: 50%;
+        border: 1px solid var(--matcha);
+        pointer-events: none;
+        animation: ripple 2.8s ease-out forwards;
+      }
+
+      /* A single leaf drifting down now and then */
+      .leaf {
+        position: fixed;
+        top: -30px;
+        width: 14px;
+        height: 7px;
+        border-radius: 0 100% 0 100%;
+        background: var(--matcha-light);
+        opacity: 0.8;
+        pointer-events: none;
+        animation: fall linear forwards;
+      }
+
+      @keyframes ink { to { opacity: 1; filter: blur(0); } }
+      @keyframes draw { to { width: min(260px, 60vw); } }
+      @keyframes stamp { to { opacity: 0.92; transform: scale(1) rotate(-4deg); } }
+      @keyframes steam {
+        0% { opacity: 0; transform: translateY(8px); }
+        30% { opacity: 0.45; }
+        100% { opacity: 0; transform: translateY(-22px); }
+      }
+      @keyframes ripple {
+        from { transform: scale(1); opacity: 0.7; }
+        to { transform: scale(14); opacity: 0; }
+      }
+      @keyframes fall {
+        from { transform: translate(0, 0) rotate(0); }
+        to { transform: translate(var(--drift), 110vh) rotate(var(--spin)); }
+      }
+
+      /* On narrow screens, put the Japanese under the message */
+      @media (max-width: 600px) {
+        main { flex-direction: column; }
+        .vertical { writing-mode: horizontal-tb; letter-spacing: 0.25em; }
+      }
+
+      /* Still version for people who turn off motion on their device */
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { animation: none !important; }
+        .ink { opacity: 1; filter: none; }
+        .seal { opacity: 0.92; transform: rotate(-4deg); }
+        .line { width: min(260px, 60vw); }
+        .cup .steam { opacity: 0.35; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="message">
+        <svg class="cup ink ink-1" viewBox="0 0 120 110" aria-hidden="true">
+          <path class="steam" d="M45 40 C 38 30, 52 22, 45 10" />
+          <path class="steam" d="M60 38 C 53 28, 67 20, 60 6" />
+          <path class="steam" d="M75 40 C 68 30, 82 22, 75 10" />
+          <!-- cup body -->
+          <path d="M22 52 H98 C 98 80, 84 98, 60 98 C 36 98, 22 80, 22 52 Z" fill="#fbf8f2" stroke="#2b2a26" stroke-width="2" />
+          <!-- tea surface -->
+          <ellipse cx="60" cy="52" rx="38" ry="6" fill="#8fae6b" stroke="#2b2a26" stroke-width="2" />
+          <!-- foot -->
+          <path d="M46 98 L48 104 H72 L74 98" fill="none" stroke="#2b2a26" stroke-width="2" stroke-linejoin="round" />
+          <!-- brush stroke band -->
+          <path d="M28 70 C 50 74, 72 66, 94 71" fill="none" stroke="#6b8f47" stroke-width="3" stroke-linecap="round" opacity="0.6" />
+        </svg>
+        <h1 class="ink ink-2">Can I please have<br>a <span class="tea">green tea</span>?</h1>
+        <div class="line" aria-hidden="true"></div>
+      </div>
+      <div class="vertical ink ink-3" lang="ja">
+        <span>お茶をください</span>
+        <span class="seal" aria-hidden="true">茶</span>
+      </div>
+    </main>
+    <script>
+      const calm = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Tap or click anywhere for a slow ripple, like touching the surface of tea
+      addEventListener('pointerdown', (e) => {
+        if (!calm) return;
+        const ring = document.createElement('div');
+        ring.className = 'ripple';
+        ring.style.left = e.clientX + 'px';
+        ring.style.top = e.clientY + 'px';
+        document.body.appendChild(ring);
+        setTimeout(() => ring.remove(), 2800);
+      });
+
+      // Every few seconds, one tea leaf drifts down
+      if (calm) {
+        const dropLeaf = () => {
+          const leaf = document.createElement('div');
+          leaf.className = 'leaf';
+          const duration = 14 + Math.random() * 8;
+          leaf.style.left = Math.random() * 100 + 'vw';
+          leaf.style.animationDuration = duration + 's';
+          leaf.style.setProperty('--drift', (Math.random() * 160 - 80) + 'px');
+          leaf.style.setProperty('--spin', (Math.random() * 540 - 270) + 'deg');
+          document.body.appendChild(leaf);
+          setTimeout(() => leaf.remove(), duration * 1000);
+        };
+        setTimeout(() => { dropLeaf(); setInterval(dropLeaf, 4500); }, 5000);
+      }
+    </script>
+  </body>
+</html>
