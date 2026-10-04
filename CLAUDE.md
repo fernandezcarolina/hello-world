@@ -9,6 +9,8 @@ A personal learning repo (see README.md): the owner is a designer new to Git, Gi
 - `index.html` — the home page ("Hello, Sam" bedtime note: night sky, moon, twinkling stars and floating hearts).
 - `tea/index.html` — a separate page served at `/tea` ("Green tea, please").
 
+`PROJECT_MAP.md` documents each page in detail (color tokens, animation timelines, interactions). `ios.md` is the plan for a native SwiftUI port, which is not started yet. Update both when a page's look or behavior changes.
+
 Each page is fully self-contained: all CSS lives in an inline `<style>` block, any JS in an inline `<script>` at the end of `<body>`, and the only external resource is a Google Fonts stylesheet. Pages don't share styles or link to each other — add a new page as `<name>/index.html` so it's served at `/<name>`.
 
 ## Conventions used in the pages
@@ -16,6 +18,7 @@ Each page is fully self-contained: all CSS lives in an inline `<style>` block, a
 - Colors are defined as CSS custom properties on `:root` and referenced via `var(--…)`.
 - Fluid sizing with `clamp()`; layout is a centered CSS grid (`display: grid; place-items: center; min-height: 100vh`).
 - Decorative elements created from JS get `aria-hidden="true"`.
+- Fonts come from Google Fonts: Instrument Serif on the home page, Shippori Mincho on `/tea`.
 - Every animated page includes a `@media (prefers-reduced-motion: reduce)` block that disables animations and shows the final state; JS-driven motion checks `matchMedia('(prefers-reduced-motion: reduce)')` too. Keep this when adding motion.
 
 ## Previewing and deploying
