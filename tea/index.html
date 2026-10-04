@@ -9,13 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600&display=swap" rel="stylesheet">
     <style>
       :root {
-        --paper: #f2ede3;
-        --paper-deep: #e6dfd0;
-        --ink: #2b2a26;
-        --ink-soft: #7a766c;
-        --matcha: #6b8f47;
-        --matcha-light: #a9c28a;
-        --seal: #b8392b;
+        --paper: #23211c;
+        --paper-deep: #121110;
+        --ink: #efe9dc;
+        --ink-soft: #a39d90;
+        --matcha: #9cc075;
+        --matcha-light: #5f7d42;
+        --seal: #c4473a;
+        --cup: #2e2b25;
+        color-scheme: dark;
       }
       body {
         margin: 0;
@@ -38,7 +40,7 @@
         inset: 0;
         pointer-events: none;
         opacity: 0.35;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.4 0 0 0 0 0.3 0 0 0 0.12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.9 0 0 0 0 0.8 0 0 0 0.1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
       }
 
       main {
@@ -99,7 +101,7 @@
         height: 2.2em;
         border-radius: 6px;
         background: var(--seal);
-        color: var(--paper);
+        color: var(--ink);
         font-size: 0.9em;
         letter-spacing: 0;
         opacity: 0;
@@ -183,13 +185,13 @@
           <path class="steam" d="M60 38 C 53 28, 67 20, 60 6" />
           <path class="steam" d="M75 40 C 68 30, 82 22, 75 10" />
           <!-- cup body -->
-          <path d="M22 52 H98 C 98 80, 84 98, 60 98 C 36 98, 22 80, 22 52 Z" fill="#fbf8f2" stroke="#2b2a26" stroke-width="2" />
+          <path d="M22 52 H98 C 98 80, 84 98, 60 98 C 36 98, 22 80, 22 52 Z" style="fill: var(--cup); stroke: var(--ink)" stroke-width="2" />
           <!-- tea surface -->
-          <ellipse cx="60" cy="52" rx="38" ry="6" fill="#8fae6b" stroke="#2b2a26" stroke-width="2" />
+          <ellipse cx="60" cy="52" rx="38" ry="6" fill="#8fae6b" style="stroke: var(--ink)" stroke-width="2" />
           <!-- foot -->
-          <path d="M46 98 L48 104 H72 L74 98" fill="none" stroke="#2b2a26" stroke-width="2" stroke-linejoin="round" />
+          <path d="M46 98 L48 104 H72 L74 98" fill="none" style="stroke: var(--ink)" stroke-width="2" stroke-linejoin="round" />
           <!-- brush stroke band -->
-          <path d="M28 70 C 50 74, 72 66, 94 71" fill="none" stroke="#6b8f47" stroke-width="3" stroke-linecap="round" opacity="0.6" />
+          <path d="M28 70 C 50 74, 72 66, 94 71" fill="none" style="stroke: var(--matcha)" stroke-width="3" stroke-linecap="round" opacity="0.6" />
         </svg>
         <h1 class="ink ink-2">Can I please have<br>a <span class="tea">green tea</span>?</h1>
         <div class="line" aria-hidden="true"></div>
