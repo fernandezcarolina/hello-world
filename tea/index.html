@@ -6,16 +6,19 @@
     <title>Green tea, please</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400&family=Shippori+Mincho:wght@400;600&display=swap" rel="stylesheet">
     <style>
       :root {
-        --paper: #f2ede3;
-        --paper-deep: #e6dfd0;
-        --ink: #2b2a26;
-        --ink-soft: #7a766c;
+        --paper: #f7eee8;
+        --paper-deep: #ecdcd4;
+        --glow: #f4cfcf;
+        --ink: #3a2c2c;
+        --ink-soft: #8a7470;
         --matcha: #6b8f47;
         --matcha-light: #a9c28a;
-        --seal: #b8392b;
+        --rose: #c46a74;
+        --petal: #f3c6cb;
+        --seal: #b8473f;
       }
       body {
         margin: 0;
@@ -26,6 +29,7 @@
         font-family: "Shippori Mincho", Georgia, serif;
         color: var(--ink);
         background:
+          radial-gradient(circle at 50% 38%, color-mix(in srgb, var(--glow) 70%, transparent) 0, transparent 45%),
           radial-gradient(ellipse at 50% 40%, var(--paper) 40%, var(--paper-deep) 100%);
         cursor: default;
         -webkit-tap-highlight-color: transparent;
@@ -38,7 +42,17 @@
         inset: 0;
         pointer-events: none;
         opacity: 0.35;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.4 0 0 0 0 0.3 0 0 0 0.12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.38 0 0 0 0 0.36 0 0 0 0.12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+
+      /* Soft warm light that slowly breathes, like late afternoon sun */
+      body::after {
+        content: "";
+        position: fixed;
+        inset: -20%;
+        pointer-events: none;
+        background: radial-gradient(circle at 50% 38%, color-mix(in srgb, var(--glow) 55%, transparent), transparent 40%);
+        animation: breathe 9s ease-in-out infinite;
       }
 
       main {
@@ -51,18 +65,25 @@
       }
       .message { text-align: center; }
 
-      /* Tea cup */
-      .cup { width: clamp(110px, 16vw, 160px); margin: 0 auto 1.5rem; display: block; overflow: visible; }
-      .cup .steam {
+      /* Two cups, leaning toward each other */
+      .cups { width: clamp(200px, 30vw, 300px); margin: 0 auto 1.25rem; display: block; overflow: visible; }
+      .cups .steam {
         fill: none;
         stroke: var(--ink-soft);
-        stroke-width: 2;
+        stroke-width: 1.6;
         stroke-linecap: round;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
         opacity: 0;
-        animation: steam 6s ease-in-out infinite;
+        animation: steam 8s ease-in-out 2s infinite;
       }
-      .cup .steam:nth-of-type(2) { animation-delay: 2s; }
-      .cup .steam:nth-of-type(3) { animation-delay: 4s; }
+      .cups .heart {
+        fill: var(--rose);
+        opacity: 0;
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: meet 8s ease-in-out 2s infinite;
+      }
 
       h1 {
         font-size: clamp(2rem, 6vw, 4rem);
@@ -73,12 +94,22 @@
       }
       h1 .tea { color: var(--matcha); font-weight: 600; }
 
+      .whisper {
+        margin: 1rem 0 0;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-style: italic;
+        font-size: clamp(1.15rem, 2.6vw, 1.6rem);
+        color: var(--ink-soft);
+        letter-spacing: 0.02em;
+      }
+
       .line {
-        margin: 1.75rem auto 0;
+        margin: 1.5rem auto 0;
         width: 0;
         height: 1px;
-        background: var(--matcha-light);
-        animation: draw 2.4s ease 3s forwards;
+        background: linear-gradient(90deg, transparent, var(--rose), transparent);
+        opacity: 0.6;
+        animation: draw 2.4s ease 3.6s forwards;
       }
 
       /* Vertical Japanese and seal */
@@ -104,7 +135,7 @@
         letter-spacing: 0;
         opacity: 0;
         transform: scale(1.6) rotate(-8deg);
-        animation: stamp 0.5s cubic-bezier(.3, 1.4, .5, 1) 4.2s forwards;
+        animation: stamp 0.5s cubic-bezier(.3, 1.4, .5, 1) 4.8s forwards;
       }
 
       /* Ink soaking into paper */
@@ -115,44 +146,80 @@
       }
       .ink-1 { animation-delay: 0.3s; }
       .ink-2 { animation-delay: 1.2s; }
-      .ink-3 { animation-delay: 2.4s; }
+      .ink-3 { animation-delay: 2.2s; }
+      .ink-4 { animation-delay: 3s; }
 
-      /* Water ripple on tap */
+      /* Tap: a water ripple and a small heart that floats up */
       .ripple {
         position: fixed;
         width: 20px;
         height: 20px;
         margin: -10px 0 0 -10px;
         border-radius: 50%;
-        border: 1px solid var(--matcha);
+        border: 1px solid var(--rose);
         pointer-events: none;
         animation: ripple 2.8s ease-out forwards;
       }
+      .float-heart {
+        position: fixed;
+        width: 16px;
+        height: 16px;
+        margin: -8px 0 0 -8px;
+        pointer-events: none;
+        fill: var(--rose);
+        animation: rise 2.6s ease-out forwards;
+      }
 
-      /* A single leaf drifting down now and then */
-      .leaf {
+      /* Cherry blossom petals and the odd tea leaf drifting down */
+      .petal {
         position: fixed;
         top: -30px;
+        width: 12px;
+        height: 10px;
+        border-radius: 80% 0 80% 20%;
+        background: linear-gradient(135deg, #fbe3e5, var(--petal));
+        opacity: 0.9;
+        pointer-events: none;
+        animation: fall linear forwards;
+      }
+      .petal.leaf {
         width: 14px;
         height: 7px;
         border-radius: 0 100% 0 100%;
         background: var(--matcha-light);
-        opacity: 0.8;
-        pointer-events: none;
-        animation: fall linear forwards;
+        opacity: 0.75;
       }
 
       @keyframes ink { to { opacity: 1; filter: blur(0); } }
-      @keyframes draw { to { width: min(260px, 60vw); } }
+      @keyframes draw { to { width: min(280px, 60vw); } }
       @keyframes stamp { to { opacity: 0.92; transform: scale(1) rotate(-4deg); } }
+      @keyframes breathe {
+        0%, 100% { opacity: 0.6; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.06); }
+      }
+      /* The two wisps of steam rise, meet, and a heart appears where they touch */
       @keyframes steam {
-        0% { opacity: 0; transform: translateY(8px); }
-        30% { opacity: 0.45; }
-        100% { opacity: 0; transform: translateY(-22px); }
+        0% { opacity: 0; stroke-dashoffset: 1; }
+        10% { opacity: 0.5; }
+        40% { stroke-dashoffset: 0; opacity: 0.5; }
+        70% { stroke-dashoffset: 0; opacity: 0.3; }
+        90%, 100% { stroke-dashoffset: 0; opacity: 0; }
+      }
+      @keyframes meet {
+        0%, 36% { opacity: 0; transform: translateY(4px) scale(0.4); }
+        46% { opacity: 0.85; transform: translateY(0) scale(1.1); }
+        52% { transform: translateY(-1px) scale(1); }
+        78% { opacity: 0.75; transform: translateY(-6px) scale(1); }
+        92%, 100% { opacity: 0; transform: translateY(-10px) scale(0.9); }
       }
       @keyframes ripple {
         from { transform: scale(1); opacity: 0.7; }
         to { transform: scale(14); opacity: 0; }
+      }
+      @keyframes rise {
+        0% { opacity: 0; transform: translateY(0) scale(0.4); }
+        20% { opacity: 0.9; transform: translateY(-14px) scale(1); }
+        100% { opacity: 0; transform: translate(var(--sway), -90px) scale(0.8); }
       }
       @keyframes fall {
         from { transform: translate(0, 0) rotate(0); }
@@ -170,39 +237,46 @@
         *, *::before, *::after { animation: none !important; }
         .ink { opacity: 1; filter: none; }
         .seal { opacity: 0.92; transform: rotate(-4deg); }
-        .line { width: min(260px, 60vw); }
-        .cup .steam { opacity: 0.35; }
+        .line { width: min(280px, 60vw); }
+        .cups .steam { opacity: 0.35; stroke-dashoffset: 0; }
+        .cups .heart { opacity: 0.8; }
       }
     </style>
   </head>
   <body>
     <main>
       <div class="message">
-        <svg class="cup ink ink-1" viewBox="0 0 120 110" aria-hidden="true">
-          <path class="steam" d="M45 40 C 38 30, 52 22, 45 10" />
-          <path class="steam" d="M60 38 C 53 28, 67 20, 60 6" />
-          <path class="steam" d="M75 40 C 68 30, 82 22, 75 10" />
-          <!-- cup body -->
-          <path d="M22 52 H98 C 98 80, 84 98, 60 98 C 36 98, 22 80, 22 52 Z" fill="#fbf8f2" stroke="#2b2a26" stroke-width="2" />
-          <!-- tea surface -->
-          <ellipse cx="60" cy="52" rx="38" ry="6" fill="#8fae6b" stroke="#2b2a26" stroke-width="2" />
-          <!-- foot -->
-          <path d="M46 98 L48 104 H72 L74 98" fill="none" stroke="#2b2a26" stroke-width="2" stroke-linejoin="round" />
-          <!-- brush stroke band -->
-          <path d="M28 70 C 50 74, 72 66, 94 71" fill="none" stroke="#6b8f47" stroke-width="3" stroke-linecap="round" opacity="0.6" />
+        <svg class="cups ink ink-1" viewBox="0 0 240 120" aria-hidden="true">
+          <defs>
+            <g id="cup">
+              <path d="M22 52 H98 C 98 80, 84 98, 60 98 C 36 98, 22 80, 22 52 Z" fill="#fdf9f5" stroke="#3a2c2c" stroke-width="2" />
+              <ellipse cx="60" cy="52" rx="38" ry="6" fill="#8fae6b" stroke="#3a2c2c" stroke-width="2" />
+              <path d="M46 98 L48 104 H72 L74 98" fill="none" stroke="#3a2c2c" stroke-width="2" stroke-linejoin="round" />
+              <path d="M28 70 C 50 74, 72 66, 94 71" fill="none" stroke="#c46a74" stroke-width="3" stroke-linecap="round" opacity="0.55" />
+            </g>
+          </defs>
+          <!-- steam curling from each cup toward the middle -->
+          <path class="steam" pathLength="1" d="M82 66 C 74 52, 96 46, 92 36 C 89 28, 104 24, 113 26" />
+          <path class="steam" pathLength="1" d="M158 66 C 166 52, 144 46, 148 36 C 151 28, 136 24, 127 26" />
+          <!-- where the steam meets -->
+          <path class="heart" d="M120 30 C 110 23, 113 14, 120 19 C 127 14, 130 23, 120 30 Z" />
+          <use href="#cup" transform="translate(34 28) scale(0.8) rotate(4 60 98)" />
+          <use href="#cup" transform="translate(110 28) scale(0.8) rotate(-4 60 98)" />
         </svg>
         <h1 class="ink ink-2">Can I please have<br>a <span class="tea">green tea</span>?</h1>
+        <p class="whisper ink ink-3">Two cups, one slow afternoon, with you.</p>
         <div class="line" aria-hidden="true"></div>
       </div>
-      <div class="vertical ink ink-3" lang="ja">
-        <span>お茶をください</span>
+      <div class="vertical ink ink-4" lang="ja">
+        <span>お茶をご一緒に</span>
         <span class="seal" aria-hidden="true">茶</span>
       </div>
     </main>
     <script>
       const calm = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const HEART = 'M8 14 C 1 9, 2 2, 8 5.5 C 14 2, 15 9, 8 14 Z';
 
-      // Tap or click anywhere for a slow ripple, like touching the surface of tea
+      // Tap or click anywhere: a slow ripple on the tea, and a little heart floats up
       addEventListener('pointerdown', (e) => {
         if (!calm) return;
         const ring = document.createElement('div');
@@ -211,22 +285,32 @@
         ring.style.top = e.clientY + 'px';
         document.body.appendChild(ring);
         setTimeout(() => ring.remove(), 2800);
+
+        const heart = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        heart.setAttribute('viewBox', '0 0 16 16');
+        heart.setAttribute('class', 'float-heart');
+        heart.innerHTML = `<path d="${HEART}"/>`;
+        heart.style.left = e.clientX + 'px';
+        heart.style.top = e.clientY + 'px';
+        heart.style.setProperty('--sway', (Math.random() * 40 - 20) + 'px');
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 2600);
       });
 
-      // Every few seconds, one tea leaf drifts down
+      // Every few seconds a cherry blossom petal (or now and then a tea leaf) drifts down
       if (calm) {
-        const dropLeaf = () => {
-          const leaf = document.createElement('div');
-          leaf.className = 'leaf';
-          const duration = 14 + Math.random() * 8;
-          leaf.style.left = Math.random() * 100 + 'vw';
-          leaf.style.animationDuration = duration + 's';
-          leaf.style.setProperty('--drift', (Math.random() * 160 - 80) + 'px');
-          leaf.style.setProperty('--spin', (Math.random() * 540 - 270) + 'deg');
-          document.body.appendChild(leaf);
-          setTimeout(() => leaf.remove(), duration * 1000);
+        const drop = () => {
+          const petal = document.createElement('div');
+          petal.className = Math.random() < 0.25 ? 'petal leaf' : 'petal';
+          const duration = 13 + Math.random() * 8;
+          petal.style.left = Math.random() * 100 + 'vw';
+          petal.style.animationDuration = duration + 's';
+          petal.style.setProperty('--drift', (Math.random() * 200 - 100) + 'px');
+          petal.style.setProperty('--spin', (Math.random() * 720 - 360) + 'deg');
+          document.body.appendChild(petal);
+          setTimeout(() => petal.remove(), duration * 1000);
         };
-        setTimeout(() => { dropLeaf(); setInterval(dropLeaf, 4500); }, 5000);
+        setTimeout(() => { drop(); setInterval(drop, 3000); }, 4000);
       }
     </script>
   </body>
