@@ -54,30 +54,39 @@ Each page is one self-contained file. The pages don't share CSS or JS, and they 
 
 ## Screen 2: "Green tea, please" (`tea/index.html`)
 
-**Message:** "Can I please have a **green tea**?", with vertical Japanese beside it: お茶をください ("tea, please") and a red seal stamp 茶 ("tea").
+**Message:** "Can I please have a **green tea**?", then in italic "Two cups, one slow afternoon, with you." Beside it, vertical Japanese お茶をご一緒に ("shall we have tea together") and a red seal stamp 茶 ("tea").
 
-**Look:** Warm paper with a faint grain, ink-colored text and matcha green accents. The font is Shippori Mincho (400 and 600), a Japanese Mincho serif from Google Fonts.
+**Look:** Soft and a little romantic. The fonts are Shippori Mincho (400 and 600, a Japanese Mincho serif) and Cormorant Garamond italic for the second line, both from Google Fonts. The page follows the device's light/dark setting:
 
-| Token | Value | Used for |
-|---|---|---|
-| `--paper` / `--paper-deep` | `#f2ede3` / `#e6dfd0` | background gradient |
-| `--ink` / `--ink-soft` | `#2b2a26` / `#7a766c` | text, steam, vertical Japanese |
-| `--matcha` / `--matcha-light` | `#6b8f47` / `#a9c28a` | "green tea", ripple, divider line, leaves |
-| `--seal` | `#b8392b` | the 茶 stamp |
+- **Light:** blush paper in late-afternoon sun, with a breathing rose glow behind the cups.
+- **Dark:** the earlier dark tea palette, lit by a low rose candle glow.
+
+| Token | Light | Dark | Used for |
+|---|---|---|---|
+| `--paper` / `--paper-deep` | `#f7eee8` / `#ecdcd4` | `#23211c` / `#121110` | background gradient |
+| `--glow` | `#f4cfcf` | `#4a2a2c` | breathing glow behind the cups |
+| `--ink` / `--ink-soft` | `#3a2c2c` / `#8a7470` | `#efe9dc` / `#a39d90` | text, cup outlines, steam, italic line |
+| `--matcha` / `--matcha-light` | `#6b8f47` / `#a9c28a` | `#9cc075` / `#5f7d42` | "green tea", leaves |
+| `--rose` / `--petal` | `#c46a74` / `#f3c6cb` | `#e0939b` / `#d99aa2` | heart, cup band, divider, ripple, petals |
+| `--seal` / `--seal-text` | `#b8473f` / paper | `#c4473a` / ink | the 茶 stamp |
+| `--cup` | `#fdf9f5` | `#2e2b25` | cup body |
+| `--grain` | warm grain | light grain | paper texture |
 
 **Elements and motion (timeline from page load):**
 
 | When | What | How it's built |
 |---|---|---|
-| always | Paper grain over the whole screen | Inline SVG noise filter (`feTurbulence`) as a background image |
-| 0.3 s | Tea cup soaks in like ink (blur → sharp, 2.6 s). Three steam wisps rise on a staggered 6 s loop | Inline SVG: cup body, tea surface, foot, brush band, steam paths |
+| always | Paper grain over the whole screen, and a rose glow that slowly breathes (9 s) | SVG noise filter as a background image; `body::after` radial gradient |
+| 0.3 s | Two cups leaning together soak in like ink (blur → sharp, 2.6 s) | Inline SVG: one cup drawn in `<defs>`, used twice and tilted |
+| 2 s → every 8 s | A steam wisp rises from each cup, they curl toward each other and a small heart appears where they meet, then drifts up and fades | SVG paths drawn with `stroke-dashoffset`; heart synced on the same 8 s loop |
 | 1.2 s | Headline soaks in | CSS `ink` animation |
-| 2.4 s | Vertical Japanese soaks in | same |
-| 3 s | A thin green line draws itself under the headline | CSS width animation |
-| 4.2 s | The seal stamps down with a little overshoot and settles slightly rotated | CSS `cubic-bezier` bounce |
-| 5 s → forever | One tea leaf drifts down every 4.5 s, taking 14–22 s, with random drift and spin | Created and removed by JS |
+| 2.2 s | Italic line soaks in | same |
+| 3 s | Vertical Japanese soaks in | same |
+| 3.6 s | A thin rose line draws itself under the message | CSS width animation |
+| 4.8 s | The seal stamps down with a little overshoot and settles slightly rotated | CSS `cubic-bezier` bounce |
+| 4 s → forever | A cherry blossom petal (or, one time in four, a tea leaf) drifts down every 3 s, taking 13–21 s, with random drift and spin | Created and removed by JS |
 
-**Interaction:** Tapping or clicking anywhere sends out a slow green ripple from that point (2.8 s).
+**Interaction:** Tapping or clicking anywhere sends out a slow rose ripple (2.8 s) and a small heart that floats up and fades (2.6 s).
 
 **Layout:** Side by side (message and vertical Japanese) on wide screens. Below 600 px wide, the Japanese moves under the message and switches to horizontal text.
 
